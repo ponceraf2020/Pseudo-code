@@ -11,6 +11,7 @@ features = ['HLA-DRB1', 'CXCR4', 'ITGAM', 'ACTB', 'RHOA', 'RPS27A', 'UBA52', 'RP
 feature_names = np.array(features)
 
 # Define inputs and outputs
+import numpy as np
 X = df.iloc[0:143, 0:74].values
 y = df.iloc[0:143, 75].values
 y = np.where(y == 'healthy', 0, 1)
