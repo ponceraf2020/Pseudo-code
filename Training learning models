@@ -1,6 +1,20 @@
 # Import data
 import pandas as pd
-import numpy as np
-
 df = pd.read_excel("GSE17048.xlsx")
-df
+
+# Define inputs and outputs
+import numpy as np
+X = df.iloc[0:143, [0, 1, 4, 9, 13, 15, 18, 20, 21, 22, 24, 25, 27, 28, 29, 31, 33, 40, 41, 42, 47, 48, 51, 52, 53, 
+                    57, 58, 59, 60, 66, 68, 70, 71, 72, 73]].values # 35 selected features
+X = df.iloc[0:143, 0:74].values
+y = np.where(y == 'healthy', 0, 1)
+
+# Split data (80% training, 20% testing)
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, stratify=y)
+
+# Standardize data
+from sklearn.preprocessing import StandardScaler
+scale = StandardScaler()
+X_train_std = scale.fit_transform(X_train)
+X_test_std = scale.transform(X_test)
