@@ -18,3 +18,63 @@ from sklearn.preprocessing import StandardScaler
 scale = StandardScaler()
 X_train_std = scale.fit_transform(X_train)
 X_test_std = scale.transform(X_test)
+
+# Train conventional classifiers and compute predictions and some performance metrics
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, log_loss
+from time import time
+tic = time()
+kn = KNeighborsClassifier()
+kn.fit(X_train_std, y_train)
+y_pred_kn = kn.predict(X_test_std)
+confmat = confusion_matrix(y_test, y_pred_kn)
+accuracy = accuracy_score(y_test, y_pred_kn)
+sensitivity = recall_score(y_test, y_pred_kn)
+cross_entropy = log_loss(y_test, y_pred_kn)
+toc = time()
+print(confmat)
+print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print(f"Done in {toc - tic:.3f}s")
+
+from sklearn.linear_model import LogisticRegression
+tic = time()
+lr = LogisticRegression()
+lr.fit(X_train_std, y_train)
+y_pred_lr = lr.predict(X_test_std)
+confmat = confusion_matrix(y_test, y_pred_lr)
+accuracy = accuracy_score(y_test, y_pred_lr)
+sensitivity = recall_score(y_test, y_pred_lr)
+cross_entropy = log_loss(y_test, y_pred_lr)
+toc = time()
+print(confmat)
+print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print(f"Done in {toc - tic:.3f}s")
+
+from sklearn.svm import SVC
+tic = time()
+svm = SVC()
+svm.fit(X_train_std, y_train)
+y_pred_svm = svm.predict(X_test_std)
+confmat = confusion_matrix(y_test, y_pred_svm)
+accuracy = accuracy_score(y_test, y_pred_svm)
+sensitivity = recall_score(y_test, y_pred_svm)
+cross_entropy = log_loss(y_test, y_pred_svm)
+toc = time()
+print(confmat)
+print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print(f"Done in {toc - tic:.3f}s")
+
+from sklearn.tree import DecisionTreeClassifier
+tic = time()
+dt = DecisionTreeClassifier()
+dt.fit(X_train_std, y_train)
+y_pred_dt = dt.predict(X_test_std)
+confmat = confusion_matrix(y_test, y_pred_dt)
+accuracy = accuracy_score(y_test, y_pred_dt)
+sensitivity = recall_score(y_test, y_pred_dt)
+cross_entropy = log_loss(y_test, y_pred_dt)
+toc = time()
+print(confmat)
+print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print(f"Done in {toc - tic:.3f}s")
+
