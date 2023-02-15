@@ -12,8 +12,8 @@ feature_names = np.array(features)
 
 # Define inputs and outputs
 import numpy as np
-X = df.iloc[0:143, 0:74].values
-y = df.iloc[0:143, 75].values
+X = df.iloc[0:143, 0:73].values
+y = df.iloc[0:143, 74].values
 y = np.where(y == 'healthy', 0, 1)
 
 # Split data (80% training, 20% testing)
