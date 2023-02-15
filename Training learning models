@@ -21,7 +21,7 @@ X_test_std = scale.transform(X_test)
 
 # Train conventional classifiers and compute predictions and some performance metrics
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, log_loss
+from sklearn.metrics import confusion_matrix, accuracy_score, log_loss
 from time import time
 tic = time()
 kn = KNeighborsClassifier()
@@ -29,11 +29,10 @@ kn.fit(X_train_std, y_train)
 y_pred_kn = kn.predict(X_test_std)
 confmat = confusion_matrix(y_test, y_pred_kn)
 accuracy = accuracy_score(y_test, y_pred_kn)
-sensitivity = recall_score(y_test, y_pred_kn)
 cross_entropy = log_loss(y_test, y_pred_kn)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print("A: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 from sklearn.linear_model import LogisticRegression
@@ -43,11 +42,10 @@ lr.fit(X_train_std, y_train)
 y_pred_lr = lr.predict(X_test_std)
 confmat = confusion_matrix(y_test, y_pred_lr)
 accuracy = accuracy_score(y_test, y_pred_lr)
-sensitivity = recall_score(y_test, y_pred_lr)
 cross_entropy = log_loss(y_test, y_pred_lr)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print("A: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 from sklearn.svm import SVC
@@ -57,11 +55,10 @@ svm.fit(X_train_std, y_train)
 y_pred_svm = svm.predict(X_test_std)
 confmat = confusion_matrix(y_test, y_pred_svm)
 accuracy = accuracy_score(y_test, y_pred_svm)
-sensitivity = recall_score(y_test, y_pred_svm)
 cross_entropy = log_loss(y_test, y_pred_svm)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print("A: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 from sklearn.tree import DecisionTreeClassifier
@@ -71,10 +68,62 @@ dt.fit(X_train_std, y_train)
 y_pred_dt = dt.predict(X_test_std)
 confmat = confusion_matrix(y_test, y_pred_dt)
 accuracy = accuracy_score(y_test, y_pred_dt)
-sensitivity = recall_score(y_test, y_pred_dt)
 cross_entropy = log_loss(y_test, y_pred_dt)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "S: ", sensitivity, "Log loss: ", cross_entropy)
+print("A: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
+
+# Train and compile the proposed ANN models
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras import regularizers
+
+# A single hidden layer ANN
+ann_1 = Sequential()
+ann_1.add(Dense(106, activation='tanh',  kernel_initializer='normal', input_shape=(35,), 
+                kernel_regularizer=regularizers.l2(l=0.01)))
+ann_1.add(Dropout(0.1))
+ann_1.add(Dense(1, activation='sigmoid'))
+ann_1.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+hist_1 = ann_1.fit(X_train_std, y_train,
+                batch_size=32, epochs=15,
+                validation_data=(X_test_std, y_test))
+ann_1.evaluate(X_test_std, y_test)
+y_pred_ann_1 = ann_1.predict(X_test_std)
+# converting values
+y_pred_ann_1 = (y_pred_ann_1 > 0.5)
+confmat = confusion_matrix(y_test, y_pred_ann_1)
+print(confmat)
+accuracy = accuracy_score(y_test, y_pred_ann_1)
+print("A: ", accuracy)
+
+# Two hidden layers ANN
+ann_2 = Sequential()
+ann_2.add(Dense(53, activation='tanh',  kernel_initializer='normal', input_shape=(35,), 
+                kernel_regularizer=regularizers.l2(l=0.01)))
+ann_2.add(Dropout(0.1))
+# Add second hidden layer
+ann_2.add(Dense(53, activation='tanh', kernel_regularizer=regularizers.l2(l=0.01)))
+ann_2.add(Dropout(0.1))
+ann_2.add(Dense(1, activation='sigmoid'))
+ann_2.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+hist_2 = ann_2.fit(X_train_std, y_train,
+                batch_size=32, epochs=15,
+                validation_data=(X_test_std, y_test))
+ann_2.evaluate(X_test_std, y_test)
+y_pred_ann_2 = ann_2.predict(X_test_std)
+# converting values
+y_pred_ann_2 = (y_pred_ann_2 > 0.5)
+confmat = confusion_matrix(y_test, y_pred_ann_2)
+print(confmat)
+accuracy = accuracy_score(y_test, y_pred_ann_2)
+print("A: ", accuracy)
+                
+
+
 
