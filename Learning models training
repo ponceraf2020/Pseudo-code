@@ -32,20 +32,20 @@ accuracy = accuracy_score(y_test, y_pred_kn)
 cross_entropy = log_loss(y_test, y_pred_kn)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "Log loss: ", cross_entropy)
+print("acc: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 tic = time()
-lr = LogisticRegression()
-lr.fit(X_train_std, y_train)
-y_pred_lr = lr.predict(X_test_std)
-confmat = confusion_matrix(y_test, y_pred_lr)
-accuracy = accuracy_score(y_test, y_pred_lr)
-cross_entropy = log_loss(y_test, y_pred_lr)
+gnb = GaussianNB()
+gnb.fit(X_train_std, y_train)
+y_pred_gnb = gnb.predict(X_test_std)
+confmat = confusion_matrix(y_test, y_pred_gnb)
+accuracy = accuracy_score(y_test, y_pred_gnb)
+cross_entropy = log_loss(y_test, y_pred_gnb)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "Log loss: ", cross_entropy)
+print("acc: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 from sklearn.svm import SVC
@@ -58,7 +58,7 @@ accuracy = accuracy_score(y_test, y_pred_svm)
 cross_entropy = log_loss(y_test, y_pred_svm)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "Log loss: ", cross_entropy)
+print("acc: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 from sklearn.tree import DecisionTreeClassifier
@@ -71,7 +71,7 @@ accuracy = accuracy_score(y_test, y_pred_dt)
 cross_entropy = log_loss(y_test, y_pred_dt)
 toc = time()
 print(confmat)
-print("A: ", accuracy, "Log loss: ", cross_entropy)
+print("acc: ", accuracy, "Log loss: ", cross_entropy)
 print(f"Done in {toc - tic:.3f}s")
 
 # Train and compile the proposed ANN models
@@ -98,7 +98,7 @@ y_pred_ann_1 = (y_pred_ann_1 > 0.5)
 confmat = confusion_matrix(y_test, y_pred_ann_1)
 print(confmat)
 accuracy = accuracy_score(y_test, y_pred_ann_1)
-print("A: ", accuracy)
+print("acc: ", accuracy)
 
 # Two hidden layers ANN
 ann_2 = Sequential()
@@ -122,7 +122,7 @@ y_pred_ann_2 = (y_pred_ann_2 > 0.5)
 confmat = confusion_matrix(y_test, y_pred_ann_2)
 print(confmat)
 accuracy = accuracy_score(y_test, y_pred_ann_2)
-print("A: ", accuracy)
+print("acc: ", accuracy)
                 
 
 
